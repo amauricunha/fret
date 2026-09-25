@@ -71,7 +71,13 @@ export function checkRealizabilityKind2(filePath, options, callback) {
   });
 
   kind2.on('close', (code) => {
-    var jsonContent = JSON.parse(stdout);
+    var jsonContent;
+    try {
+      jsonContent = JSON.parse(stdout);
+    } catch (parseErr) {
+      callback(new Error('Kind 2 output parse error: ' + parseErr.message));
+      return;
+    }
     switch(code) {
       case 0:
       case 40:
